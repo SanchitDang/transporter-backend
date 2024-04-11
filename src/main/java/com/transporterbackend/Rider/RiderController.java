@@ -21,6 +21,13 @@ public class RiderController {
         return riderService.getRiders();
     }
 
+    @GetMapping("getRider/{riderId}")
+    public RiderModel getRider(
+            @PathVariable("riderId") Long riderId
+    ){
+        return riderService.getRider(riderId);
+    }
+
     @PostMapping("addRider")
     public void addRider(@RequestBody RiderModel riderModel){
         riderService.addRider(riderModel);
@@ -34,9 +41,14 @@ public class RiderController {
     @PutMapping("updateRider/{riderId}")
     public void updateRider(
             @PathVariable("riderId") Long riderId,
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String email){
-        riderService.updateRider(riderId, name, email);
+            @RequestBody RiderModel updatedRider){
+        riderService.updateRider(riderId, updatedRider);
     }
+
+    @PostMapping("loginRider")
+    public void loginRider(@RequestBody LoginRequest loginRequest){
+        riderService.loginRider(loginRequest.getEmail(), loginRequest.getPassword());
+    }
+
 
 }

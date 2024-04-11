@@ -10,7 +10,7 @@ import java.util.List;
 public class RiderConfig {
 
     @Bean
-    CommandLineRunner commandLineRunner(RiderRepository repository){
+    CommandLineRunner commandLineRunnerRider(RiderRepository repository){
         return args -> {
             RiderModel sanchit = new RiderModel(
                     "sanchit@outlook.com",
