@@ -21,19 +21,19 @@ public class RiderModel {
     private String phone;
     private String firstName;
     private String lastName;
-
-    // use @Transient if we want any value that we do not want to put inside as a column
+    private String profileImagePath;
 
     public RiderModel() {
     }
 
-    public RiderModel(Long id, String email, String password, String phone, String firstName, String lastName) {
+    public RiderModel(Long id, String email, String password, String phone, String firstName, String lastName, String profileImagePath) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.profileImagePath = profileImagePath;
     }
 
     public RiderModel(String email, String password, String phone, String firstName, String lastName) {
@@ -90,6 +90,14 @@ public class RiderModel {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getProfileImagePath() {
+        return profileImagePath;
+    }
+
+    public void setProfileImagePath(String profileImagePath) {
+        this.profileImagePath = profileImagePath;
     }
 
     @Override

@@ -1,12 +1,13 @@
 package com.transporterbackend.Rider;
 
+import com.transporterbackend.Utils.FileService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class RiderService {
@@ -90,6 +91,44 @@ public class RiderService {
             // Password does not match
             throw new IllegalArgumentException("Incorrect password");
         }
+    }
+
+    // Method to upload rider's profile picture
+    public void uploadRiderProfilePicture(String imageStoringPath, MultipartFile image, Long riderId){
+        FileService fileService = new FileService();
+        try {
+            // check if rider id exist or throw exception
+            RiderModel rider = riderRepository.findById(riderId).orElseThrow(() -> new IllegalStateException("Rider with id " + riderId + " does not exist."));
+            // getting the path where the image is stored in server
+            String filePath = fileService.uploadImage(imageStoringPath, image);
+            System.out.println(filePath);
+            // putting the path profileImagePath column
+            rider.setProfileImagePath(filePath);
+            // Save the updated rider to the database
+            riderRepository.save(rider);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload image: " + e.getMessage(), e);
+        }
+    }
+
+    public void removeRiderProfilePicture(Long riderId){
+        FileService fileService = new FileService();
+        try {
+            // get the image path
+            RiderModel rider = riderRepository.findById(riderId).orElseThrow(() -> new IllegalStateException("Rider with id " + riderId + " does not exist."));
+            String imageFilePath = rider.getProfileImagePath();
+
+            // delete the image from server
+            fileService.removeImage(imageFilePath);
+
+            // set the path as empty in the profileImagePath of rider
+            rider.setProfileImagePath(null);
+            riderRepository.save(rider);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload image: " + e.getMessage(), e);
+        }
+
     }
 
 }

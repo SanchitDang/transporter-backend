@@ -1,7 +1,9 @@
 package com.transporterbackend.Rider;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -10,6 +12,8 @@ import java.util.List;
 public class RiderController {
 
     private final RiderService riderService;
+    @Value("${project.rider_images}")
+    String imageStoringPath;
 
     @Autowired
     public RiderController(RiderService riderService) {
@@ -50,5 +54,19 @@ public class RiderController {
         riderService.loginRider(loginRequest.getEmail(), loginRequest.getPassword());
     }
 
+    @PostMapping("uploadRiderProfileImage")
+    public void uploadRiderProfilePicture(
+            @RequestParam("riderId") Long riderId,
+            @RequestBody MultipartFile image
+            ){
+        riderService.uploadRiderProfilePicture(imageStoringPath, image, riderId);
+    }
+
+    @PostMapping("removeRiderProfileImage")
+    public void removeRiderProfilePicture(
+            @RequestParam("riderId") Long riderId
+    ){
+        riderService.removeRiderProfilePicture(riderId);
+    }
 
 }
